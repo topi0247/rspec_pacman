@@ -1,0 +1,12 @@
+FROM ruby:3.3.0
+ARG UID=1000
+ENV LANG C.UTF-8
+ENV TZ Asia/Tokyo
+ENV BUNDLE_APP_CONFIG /gem/.bundle
+RUN apt-get update -qq && apt-get install -y build-essential
+
+RUN useradd -m -u $UID rails
+RUN mkdir /gem
+WORKDIR /gem
+COPY . /gem
+RUN chown rails:rails -R /gem

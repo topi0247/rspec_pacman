@@ -1,0 +1,15 @@
+services:
+  gem:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bash -c "bundle install && rm -f tmp/pids/server.pid && /bin/bash"
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/gem
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - "3000:3000"
+    user: "1000:1000"
