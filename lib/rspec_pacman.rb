@@ -16,19 +16,49 @@ module RspecPacman
       @total_examples = 0
       @completed_examples = 0
       @progress_bar = []
+      @terminal_width = IO.console.winsize[1] rescue 80
+      @last_printed_lines = 0
     end
 
     def start(notification)
       @total_examples = notification.count
-      @bar_length = @total_examples
-      @progress_bar = Array.new(@total_examples) { RSpec::Core::Formatters::ConsoleCodes.wrap("・", :yellow) }
+      @progress_bar = Array.new(@total_examples) { "・" }
+      update_progress
+    end
+
+    def display_width(str)
+      str.each_char.map { |char| char.bytesize == 1 ? 1 : 2 }.sum
     end
 
     def update_progress
-      bar = @progress_bar.join
+      completed_bar = @progress_bar[0...@completed_examples].join
+      rest_bar = RSpec::Core::Formatters::ConsoleCodes.wrap(@progress_bar[@completed_examples..-1].join, :yellow)
+      all_bar = "#{completed_bar}#{rest_bar}"
 
-      progress_bar = "total: #{@total_examples} |#{bar}|"
-      output.print "\r#{progress_bar.ljust(@bar_length + 20)}"
+      prefix = "total: #{@total_examples} |"
+      suffix = "|"
+      extra_length = display_width(prefix) + display_width(suffix)
+
+      max_bar_length = @terminal_width - extra_length
+
+      lines = []
+      current_line = prefix
+      all_bar.each_char do |char|
+        if display_width(current_line + char + suffix) > @terminal_width
+          lines << current_line
+          current_line = " " * display_width(prefix)
+        end
+        current_line += char
+      end
+      lines << current_line + suffix
+
+      output.print "\e[#{@last_printed_lines}F\e[J" if @last_printed_lines > 0
+
+      lines.each do |line|
+        output.puts line
+      end
+
+      @last_printed_lines = lines.size
       output.flush
     end
 
@@ -58,9 +88,9 @@ module RspecPacman
     def dump_summary(summary)
       output.puts "\n"
       output.puts "Result"
-      output.puts "✅ Success: #{summary.example_count - summary.failure_count - summary.pending_count}"
-      output.puts "❌ Failed: #{summary.failure_count}"
-      output.puts "⏸️ Pendding: #{summary.pending_count}"
+      output.puts RSpec::Core::Formatters::ConsoleCodes.wrap("✅ Success: #{summary.example_count - summary.failure_count - summary.pending_count}", :blue)
+      output.puts RSpec::Core::Formatters::ConsoleCodes.wrap("❌ Failed: #{summary.failure_count}", :red)
+      output.puts RSpec::Core::Formatters::ConsoleCodes.wrap("⏸️ Pending: #{summary.pending_count}", :yellow)
       output.puts "Total Time: #{summary.duration.round(2)}秒"
     end
   end
