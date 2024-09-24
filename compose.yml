@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bash -c "bundle install && rm -f tmp/pids/server.pid && /bin/bash"
+    command: bash -c "bundle install && /bin/bash"
     tty: true
     stdin_open: true
     volumes:
