@@ -1,35 +1,56 @@
 # RspecPacman
-
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rspec_pacman`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a Gem that displays the test execution status displayed on the terminal like Pac-Man in RSpec tests.\
+It supports Ruby or Rails apps.
 
 ## Installation
-
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+Write the following in the test group of the Gemfile
+```gemfile
+gem 'rspec_pacman'
+```
+Or, you can put them in the test group individually.
+```gemfile
+gem 'rspec_pacman', group: :test
+```
+Then execute the following command
+```bash
+bundle install
+```
 
 ## Usage
+For Ruby apps, add the following to spec_helper.rb
+```rb
+require "rspec_pacman" # add
 
-TODO: Write usage instructions here
+RSpec.configure do |config|
+  config.formatter = RspecPacman::PacmanFormatter # add
+end
+```
 
-## Development
+For a Rails app, add the following to rails_helper.rb\
+Some descriptions are omitted.
+```rb
+require "rspec_pacman" # add
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+RSpec.configure do |config|
+  config.formatter = RspecPacman::PacmanFormatter # add
+end
+```
+If you are using another formatter, try writing the following It may display well.
+```rb
+RSpec.configure do |config|
+  config.formatters.clear # add
+  config.formatter = RspecPacman::PacmanFormatter
+end
+```
+After configuration is complete, run Rspec.
+```bash
+bundle exec rspec
+```
+It is assumed to be displayed as follows\
+<img src="https://i.gyazo.com/428a4cc5423aecbc8d264139a20abd67.gif" width="400px" />
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+The results of the test will be displayed as follows\
+<img src="https://i.gyazo.com/83557196d4abfb8b649d06ee0bd690b3.png" width="400px" />
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rspec_pacman.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+# License
+This Gem is provided under the MIT License.
