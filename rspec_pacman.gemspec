@@ -5,11 +5,11 @@ require_relative "lib/rspec_pacman/version"
 Gem::Specification.new do |spec|
   spec.name = "rspec_pacman"
   spec.version = RspecPacman::VERSION
-  spec.authors = ["topoi"]
+  spec.authors = ["topi"]
   spec.email = ["karubona.ra247@gmail.com"]
 
-  spec.summary = "RSpecの実行表示がパックマンっぽくなるGem"
-  spec.description = "RSpecを実行中の表示がパックマンっぽくなるGemです。"
+  spec.summary = "Gem that makes RSpec execution display look like Pacman"
+  spec.description = "This is a Gem that makes the display while running RSpec look like Pacman."
   spec.homepage = "https://github.com/topi0247"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
